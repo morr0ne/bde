@@ -39,7 +39,7 @@ dependencies = [
 ]
 
 [[package]]
-name = "bencode"
+name = "bde"
 version = "0.1.0"
 dependencies = [
  "color-eyre",
