@@ -2,7 +2,7 @@ use std::collections::BTreeMap;
 
 use serde::{ser::Impossible, Serialize};
 
-use crate::{ser::MapKeySerializer, to_value, value::Value, ByteString, Error};
+use crate::{ser::MapKeySerializer, to_value, value::Value, ByteString, Error, Dictionary};
 
 impl Serialize for Value {
     fn serialize<S>(&self, serializer: S) -> Result<S::Ok, S::Error>
@@ -240,7 +240,7 @@ impl serde::ser::SerializeSeq for SerializeVec {
 }
 
 pub struct SerializeMap {
-    dictionary: BTreeMap<ByteString, Value>,
+    dictionary: Dictionary,
 }
 
 impl SerializeMap {

@@ -10,12 +10,14 @@ mod ser;
 pub use integer::Integer;
 pub use ser::Serializer;
 
+pub type Dictionary<V = Value> = BTreeMap<ByteString, V>;
+
 #[derive(PartialEq, Eq, PartialOrd, Ord)]
 pub enum Value {
     ByteString(ByteString),
     Integer(Integer),
     List(Vec<Value>),
-    Dictionary(BTreeMap<ByteString, Value>),
+    Dictionary(Dictionary),
 }
 
 impl Debug for Value {

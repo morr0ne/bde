@@ -1,6 +1,6 @@
 use std::collections::BTreeMap;
 
-use crate::{value::Serializer as ValueSerializer, ByteString, Error, Result, Value};
+use crate::{value::Serializer as ValueSerializer, ByteString, Error, Result, Dictionary};
 use serde::ser::{self, Impossible, Serialize, SerializeMap};
 
 pub fn to_writer<W, T>(writer: W, value: &T) -> Result<()>
@@ -36,7 +36,7 @@ where
 
 pub struct StructSerializer<'a, W: 'a> {
     serializer: &'a mut Serializer<W>,
-    dictionary: BTreeMap<ByteString, Value>,
+    dictionary: Dictionary,
 }
 
 impl<'a, W> StructSerializer<'a, W> {
