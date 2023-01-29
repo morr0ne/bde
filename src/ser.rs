@@ -1,6 +1,6 @@
 use std::collections::BTreeMap;
 
-use crate::{value::Serializer as ValueSerializer, ByteString, Error, Result, Dictionary};
+use crate::{value::Serializer as ValueSerializer, ByteString, Dictionary, Error, Result};
 use serde::ser::{self, Impossible, Serialize, SerializeMap};
 
 pub fn to_writer<W, T>(writer: W, value: &T) -> Result<()>
@@ -511,7 +511,6 @@ where
     where
         T: Serialize,
     {
-        // key.serialize(&mut **self)
         unreachable!()
     }
 

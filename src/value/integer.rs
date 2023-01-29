@@ -8,7 +8,6 @@ pub struct Integer {
 
 impl Debug for Integer {
     fn fmt(&self, f: &mut std::fmt::Formatter<'_>) -> std::fmt::Result {
-        // f.debug_struct("Integer").field("inner", &self.inner).finish()
         match self.inner {
             IntegerType::Negative(n) => write!(f, "{n}"),
             IntegerType::Positive(n) => write!(f, "{n}"),

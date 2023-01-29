@@ -1,11 +1,3 @@
-// #![warn(
-//     clippy::all,
-//     clippy::restriction,
-//     clippy::pedantic,
-//     clippy::nursery,
-//     clippy::cargo,
-// )]
-
 mod byte_string;
 mod de;
 mod error;
@@ -21,5 +13,4 @@ pub use error::{Error, Result};
 #[doc(inline)]
 pub use ser::{to_bytes, to_writer, Serializer};
 #[doc(inline)]
-pub use value::{Integer, Value, to_value, Dictionary};
-
+pub use value::{to_value, Dictionary, Integer, Value};

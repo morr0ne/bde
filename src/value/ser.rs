@@ -2,7 +2,7 @@ use std::collections::BTreeMap;
 
 use serde::{ser::Impossible, Serialize};
 
-use crate::{ser::MapKeySerializer, to_value, value::Value, ByteString, Error, Dictionary};
+use crate::{ser::MapKeySerializer, to_value, value::Value, ByteString, Dictionary, Error};
 
 impl Serialize for Value {
     fn serialize<S>(&self, serializer: S) -> Result<S::Ok, S::Error>
@@ -103,7 +103,6 @@ impl serde::Serializer for Serializer {
     }
 
     fn serialize_char(self, value: char) -> Result<Self::Ok, Self::Error> {
-        //    Ok(Value::ByteString(ByteString::from(value)))
         todo!() // TODO: handle char someway
     }
 
@@ -260,7 +259,6 @@ impl serde::ser::SerializeMap for SerializeMap {
     where
         T: Serialize,
     {
-        // key.serialize(&mut **self)
         unreachable!()
     }
 
