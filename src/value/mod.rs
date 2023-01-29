@@ -8,7 +8,7 @@ mod integer;
 mod ser;
 
 pub use integer::Integer;
-pub use ser::Serializer;
+pub use ser::ValueSerializer;
 
 pub type Dictionary<V = Value> = BTreeMap<ByteString, V>;
 
@@ -46,7 +46,7 @@ pub fn to_value<T>(value: T) -> Result<Value, Error>
 where
     T: Serialize,
 {
-    value.serialize(Serializer)
+    value.serialize(ValueSerializer)
 }
 
 #[cfg(test)]

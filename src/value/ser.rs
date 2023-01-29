@@ -18,21 +18,21 @@ impl Serialize for Value {
     }
 }
 
-pub struct Serializer;
+pub struct ValueSerializer;
 
-impl Serializer {
+impl ValueSerializer {
     pub const fn new() -> Self {
         Self {}
     }
 }
 
-impl Default for Serializer {
+impl Default for ValueSerializer {
     fn default() -> Self {
         Self::new()
     }
 }
 
-impl serde::Serializer for Serializer {
+impl serde::Serializer for ValueSerializer {
     type Ok = Value;
 
     type Error = Error;
@@ -279,7 +279,7 @@ impl serde::ser::SerializeMap for SerializeMap {
         V: Serialize,
     {
         let key = key.serialize(MapKeySerializer::new())?;
-        let value = value.serialize(Serializer::new())?;
+        let value = value.serialize(ValueSerializer::new())?;
 
         self.dictionary.insert(key, value);
 
