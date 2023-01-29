@@ -37,6 +37,7 @@ use serde::{
 /// Wrapper around `Vec<u8>` to serialize and deserialize efficiently.
 /// see <https://github.com/serde-rs/bytes>
 #[derive(Clone, Default, Eq, Ord)]
+#[repr(transparent)]
 pub struct ByteString {
     bytes: Vec<u8>,
 }
