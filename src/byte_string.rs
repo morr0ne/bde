@@ -52,6 +52,10 @@ impl ByteString {
         ByteString::from(Vec::with_capacity(capacity))
     }
 
+    pub const fn from_vec(vec: Vec<u8>) -> Self {
+        Self { bytes: vec }
+    }
+
     /// Wrap existing bytes in a `ByteString`.
     pub fn from<T: Into<Vec<u8>>>(bytes: T) -> Self {
         ByteString {
