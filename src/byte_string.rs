@@ -56,13 +56,6 @@ impl ByteString {
         Self { bytes: vec }
     }
 
-    /// Wrap existing bytes in a `ByteString`.
-    pub fn from<T: Into<Vec<u8>>>(bytes: T) -> Self {
-        ByteString {
-            bytes: bytes.into(),
-        }
-    }
-
     /// Unwrap the vector of byte underlying this `ByteString`.
     pub fn into_vec(self) -> Vec<u8> {
         self.bytes
@@ -85,6 +78,12 @@ impl ByteString {
 impl Debug for ByteString {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
         f.write_str(&String::from_utf8_lossy(self))
+    }
+}
+
+impl<T: Into<Vec<u8>>> From<T> for ByteString {
+    fn from(vec: T) -> Self {
+        Self::from_vec(vec.into())
     }
 }
 
