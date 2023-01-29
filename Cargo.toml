@@ -22,6 +22,3 @@ serde_bencode = "0.2.3"
 color-eyre = "0.6.2"
 serde_bytes = "0.11.8"
 serde_test = "1.0.152"
-
-[features]
-bool = []

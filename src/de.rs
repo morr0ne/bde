@@ -221,16 +221,11 @@ impl<'de, 'a> de::Deserializer<'de> for &'a mut Deserializer<'de> {
         }
     }
 
-    fn deserialize_bool<V>(self, visitor: V) -> Result<V::Value>
+    fn deserialize_bool<V>(self, _visitor: V) -> Result<V::Value>
     where
         V: Visitor<'de>,
     {
-        // TODO: Bencode doesn't actually have boolean. Document this and make it optional
-        if let b'i' = self.next_byte()? {
-            visitor.visit_bool(self.parse_integer::<u8>(false)? != 0)
-        } else {
-            Err(Error::InvalidType)
-        }
+        Err(Error::Unsupported("bool"))
     }
 
     deserialize_integers!(i8 i16 i32 i64);
