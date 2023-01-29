@@ -43,8 +43,8 @@ pub struct ByteString {
 
 impl ByteString {
     /// Construct a new, empty `ByteString`.
-    pub fn new() -> Self {
-        ByteString::from(Vec::new())
+    pub const fn new() -> Self {
+        Self { bytes: Vec::new() }
     }
 
     /// Construct a new, empty `ByteString` with the specified capacity.

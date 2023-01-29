@@ -21,7 +21,7 @@ impl Serialize for Value {
 pub struct Serializer;
 
 impl Serializer {
-    pub fn new() -> Self {
+    pub const fn new() -> Self {
         Self {}
     }
 }

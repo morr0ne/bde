@@ -29,7 +29,7 @@ impl<W> Serializer<W>
 where
     W: std::io::Write + Sized,
 {
-    pub fn new(writer: W) -> Self {
+    pub const fn new(writer: W) -> Self {
         Self { writer }
     }
 }

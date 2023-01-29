@@ -39,18 +39,18 @@ impl From<u64> for Integer {
 }
 
 impl Integer {
-    pub fn is_i64(&self) -> bool {
+    pub const fn is_i64(&self) -> bool {
         match self.inner {
             IntegerType::Positive(n) => n <= i64::max_value() as u64,
             IntegerType::Negative(_) => true,
         }
     }
 
-    pub fn is_u64(&self) -> bool {
+    pub const fn is_u64(&self) -> bool {
         matches!(self.inner, IntegerType::Positive(_))
     }
 
-    pub fn as_i64(&self) -> Option<i64> {
+    pub const fn as_i64(&self) -> Option<i64> {
         match self.inner {
             IntegerType::Negative(n) => Some(n),
             IntegerType::Positive(n) => {
@@ -63,7 +63,7 @@ impl Integer {
         }
     }
 
-    pub fn as_u64(&self) -> Option<u64> {
+    pub const fn as_u64(&self) -> Option<u64> {
         match self.inner {
             IntegerType::Positive(n) => Some(n),
             IntegerType::Negative(_) => None,
