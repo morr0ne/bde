@@ -71,10 +71,8 @@ where
     type SerializeStruct = StructSerializer<'a, W>;
     type SerializeStructVariant = Self;
 
-    fn serialize_bool(self, value: bool) -> Result<Self::Ok> {
-        // TODO: This should be optional behavior or removed.
-        self.writer.write_all(if value { b"i1e" } else { b"i0e" })?;
-        Ok(())
+    fn serialize_bool(self, _value: bool) -> Result<Self::Ok> {
+        Err(Error::Unsupported("bool"))
     }
 
     fn serialize_i8(self, value: i8) -> Result<Self::Ok> {

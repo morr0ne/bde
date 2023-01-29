@@ -52,8 +52,8 @@ impl serde::Serializer for Serializer {
 
     type SerializeStructVariant = Impossible<Value, Error>;
 
-    fn serialize_bool(self, value: bool) -> Result<Self::Ok, Self::Error> {
-        todo!() // TODO: decide on what to do with bools
+    fn serialize_bool(self, _value: bool) -> Result<Self::Ok, Self::Error> {
+        Err(Error::Unsupported("bool"))
     }
 
     #[inline]
