@@ -8,8 +8,8 @@ mod serializer;
 mod unsorted_map_serializer;
 mod unsorted_serializer;
 
-pub use unsorted_serializer::UnsortedSerializer;
 pub use serializer::Serializer;
+pub use unsorted_serializer::UnsortedSerializer;
 
 pub fn to_writer_unsorted<W, T>(writer: W, value: &T) -> Result<()>
 where
