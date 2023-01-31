@@ -1,4 +1,4 @@
-# Unreleased
+# 0.2.0 (February 1, 2023)
 
 ### Added
 - `ByteString` is now marked with repr(transparent)
@@ -15,6 +15,7 @@
 - `ByteString::from` is now implementated properly using traits
 - Renamed `Serializer` to `ValueSerializer`
 - Made `value` module private again
+- The `Deserializer` now throws an error when encountering unsorted keys
 
 
 # 0.1.1 (January 29, 2023)
