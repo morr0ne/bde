@@ -104,8 +104,8 @@ impl serde::Serializer for ValueSerializer {
         Err(Error::Unsupported("f64"))
     }
 
-    fn serialize_char(self, value: char) -> Result<Self::Ok, Self::Error> {
-        todo!() // TODO: handle char someway
+    fn serialize_char(self, _value: char) -> Result<Self::Ok, Self::Error> {
+        Err(Error::Unsupported("char"))
     }
 
     fn serialize_str(self, value: &str) -> Result<Self::Ok, Self::Error> {
@@ -128,11 +128,11 @@ impl serde::Serializer for ValueSerializer {
     }
 
     fn serialize_unit(self) -> Result<Self::Ok, Self::Error> {
-        todo!()
+        Err(Error::Unsupported("unit"))
     }
 
-    fn serialize_unit_struct(self, name: &'static str) -> Result<Self::Ok, Self::Error> {
-        todo!()
+    fn serialize_unit_struct(self, _name: &'static str) -> Result<Self::Ok, Self::Error> {
+        Err(Error::Unsupported("unit"))
     }
 
     fn serialize_unit_variant(
