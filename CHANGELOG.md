@@ -6,7 +6,7 @@
 - Added `from_value` and `to_value` helper functions
 
 ### Removed
-- bool support since it's not actually part of the spec.
+- `bool` and `char` support since it's not actually part of the spec.
 
 ### Changed
 - Marked some functions as const
