@@ -4,6 +4,8 @@
 - `ByteString` is now marked with repr(transparent)
 - Implemented `Deserializer` for `Value`
 - Added `from_value` and `to_value` helper functions
+- Added `to_bytes_unsorted` and `to_writer_unsorted` helper functions
+- Added `UnsortedSerializer`
 
 ### Removed
 - `bool` and `char` support since it's not actually part of the spec.
