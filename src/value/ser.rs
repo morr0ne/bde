@@ -2,7 +2,9 @@ use std::collections::BTreeMap;
 
 use serde::{ser::Impossible, Serialize};
 
-use crate::{ser::MapKeySerializer, to_value, value::Value, ByteString, Dictionary, Error};
+use crate::{
+    ser::map_serializer::MapKeySerializer, to_value, value::Value, ByteString, Dictionary, Error,
+};
 
 impl Serialize for Value {
     fn serialize<S>(&self, serializer: S) -> Result<S::Ok, S::Error>
