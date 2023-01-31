@@ -1,8 +1,11 @@
-use crate::{Error, Result};
+use crate::{ByteString, Error, Result};
 use num_traits::{cast::AsPrimitive, NumCast, PrimInt, WrappingNeg};
 use paste::paste;
 use serde::{
-    de::{self, Deserialize, DeserializeSeed, MapAccess, SeqAccess, Visitor},
+    de::{
+        self, value::SeqDeserializer, Deserialize, DeserializeSeed, IntoDeserializer, MapAccess,
+        SeqAccess, Visitor,
+    },
     serde_if_integer128,
 };
 
@@ -346,7 +349,8 @@ impl<'de, 'a> de::Deserializer<'de> for &'a mut Deserializer<'de> {
         V: Visitor<'de>,
     {
         match self.next_byte()? {
-            b'd' => visitor.visit_map(self),
+            // b'd' => visitor.visit_map(self),
+            b'd' => visitor.visit_map(MapDeserializer::new(self)),
             b'l' => Err(Error::ExpectedDictionaryFoundList),
             b'i' => Err(Error::ExpectedDictionaryFoundInteger),
             b'0'..=b'9' => Err(Error::ExpectedDictionaryFoundByteString),
@@ -409,32 +413,64 @@ impl<'de> SeqAccess<'de> for Deserializer<'de> {
     }
 }
 
-impl<'de> MapAccess<'de> for Deserializer<'de> {
+struct MapDeserializer<'a, 'de: 'a> {
+    deserializer: &'a mut Deserializer<'de>,
+    last_key: Option<ByteString>,
+}
+
+impl<'a, 'de> MapDeserializer<'a, 'de> {
+    pub fn new(deserializer: &'a mut Deserializer<'de>) -> Self {
+        Self {
+            deserializer,
+            last_key: None,
+        }
+    }
+}
+
+impl<'a, 'de> MapAccess<'de> for MapDeserializer<'a, 'de> {
     type Error = Error;
 
-    fn next_key_seed<K>(&mut self, seed: K) -> Result<Option<K::Value>>
+    fn next_key_seed<K>(&mut self, seed: K) -> std::result::Result<Option<K::Value>, Self::Error>
     where
         K: DeserializeSeed<'de>,
     {
-        match self.peek_byte()? {
+        match self.deserializer.peek_byte()? {
             b'e' => {
-                self.advance();
+                self.deserializer.advance();
                 Ok(None)
             }
-            b'0'..=b'9' => seed.deserialize(&mut *self).map(Some),
+            b'0'..=b'9' => {
+                // seed.deserialize(&mut *self).map(Some)
+                let key = ByteString::deserialize(&mut *self.deserializer)?;
+
+                if let Some(last_key) = &self.last_key {
+                    if last_key > &key {
+                        Err(Error::UnsortedKeys)
+                    } else {
+                        let deserializer: SeqDeserializer<std::vec::IntoIter<u8>, Error> =
+                            key.into_vec().into_deserializer();
+                        seed.deserialize(deserializer).map(Some)
+                    }
+                } else {
+                    self.last_key = Some(key.clone());
+                    let deserializer: SeqDeserializer<std::vec::IntoIter<u8>, Error> =
+                        key.into_vec().into_deserializer();
+                    seed.deserialize(deserializer).map(Some)
+                }
+            }
             token => Err(Error::unexpected_token(
                 "number between 0-9",
                 token,
-                self.index,
+                self.deserializer.index,
             )),
         }
     }
 
-    fn next_value_seed<V>(&mut self, seed: V) -> Result<V::Value>
+    fn next_value_seed<V>(&mut self, seed: V) -> std::result::Result<V::Value, Self::Error>
     where
         V: DeserializeSeed<'de>,
     {
-        seed.deserialize(&mut *self)
+        seed.deserialize(&mut *self.deserializer)
     }
 }
 
