@@ -103,9 +103,10 @@ where
         Err(Error::Unsupported("f64"))
     }
 
-    fn serialize_char(self, value: char) -> Result<Self::Ok> {
-        let mut buf = [0; 4];
-        self.serialize_str(value.encode_utf8(&mut buf))
+    fn serialize_char(self, _value: char) -> Result<Self::Ok> {
+        Err(Error::Unsupported("char"))
+        // let mut buf = [0; 4];
+        // self.serialize_str(value.encode_utf8(&mut buf))
     }
 
     fn serialize_str(self, value: &str) -> Result<Self::Ok> {
