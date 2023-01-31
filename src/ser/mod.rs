@@ -34,12 +34,12 @@ where
     }
 }
 
-pub struct StructSerializer<'a, W: 'a> {
+pub struct MapSerializer<'a, W: 'a> {
     serializer: &'a mut Serializer<W>,
     dictionary: Dictionary,
 }
 
-impl<'a, W> StructSerializer<'a, W> {
+impl<'a, W> MapSerializer<'a, W> {
     pub fn new(serializer: &'a mut Serializer<W>) -> Self {
         Self {
             serializer,
@@ -67,8 +67,8 @@ where
     type SerializeTuple = Self;
     type SerializeTupleStruct = Self;
     type SerializeTupleVariant = Self;
-    type SerializeMap = StructSerializer<'a, W>;
-    type SerializeStruct = StructSerializer<'a, W>;
+    type SerializeMap = MapSerializer<'a, W>;
+    type SerializeStruct = MapSerializer<'a, W>;
     type SerializeStructVariant = Self;
 
     fn serialize_bool(self, _value: bool) -> Result<Self::Ok> {
@@ -216,7 +216,7 @@ where
 
     fn serialize_map(self, _len: Option<usize>) -> Result<Self::SerializeMap> {
         self.writer.write_all(b"d")?;
-        Ok(StructSerializer::new(self))
+        Ok(MapSerializer::new(self))
     }
 
     fn serialize_struct(self, _name: &'static str, _len: usize) -> Result<Self::SerializeStruct> {
@@ -499,7 +499,7 @@ impl<'a, W> ser::SerializeTupleVariant for &'a mut Serializer<W> {
     }
 }
 
-impl<'a, W> ser::SerializeMap for StructSerializer<'a, W>
+impl<'a, W> ser::SerializeMap for MapSerializer<'a, W>
 where
     W: std::io::Write,
 {
@@ -550,7 +550,7 @@ where
     }
 }
 
-impl<'a, W> ser::SerializeStruct for StructSerializer<'a, W>
+impl<'a, W> ser::SerializeStruct for MapSerializer<'a, W>
 where
     W: std::io::Write,
 {
