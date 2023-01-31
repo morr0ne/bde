@@ -8,7 +8,7 @@ description = "B-Decoder/Encoder"
 readme = "README.md"
 documentation = "https://docs.rs/bde"
 repository = "https://github.com/morr0ne/bde"
-include = ["src/**/*.rs", "README.md", "LICENSE-APACHE", "LICENSE-MIT"]
+include = ["src/**/*.rs", "README.md", "LICENSE-APACHE", "LICENSE-MIT", "LICENSE-ZLIB"]
 
 [dependencies]
 num-traits = "0.2.15"
