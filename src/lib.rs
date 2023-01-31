@@ -13,4 +13,4 @@ pub use error::{Error, Result};
 #[doc(inline)]
 pub use ser::{to_bytes, to_writer, Serializer};
 #[doc(inline)]
-pub use value::{to_value, Dictionary, Integer, Value, ValueSerializer};
+pub use value::{from_value, to_value, Dictionary, Integer, Value, ValueSerializer};

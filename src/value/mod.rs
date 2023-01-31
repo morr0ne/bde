@@ -1,4 +1,4 @@
-use serde::Serialize;
+use serde::{de::DeserializeOwned, Serialize};
 use std::{collections::BTreeMap, fmt::Debug};
 
 use crate::{byte_string::ByteString, Error};
@@ -47,6 +47,13 @@ where
     T: Serialize,
 {
     value.serialize(ValueSerializer)
+}
+
+pub fn from_value<T>(value: Value) -> Result<T, Error>
+where
+    T: DeserializeOwned,
+{
+    T::deserialize(value)
 }
 
 #[cfg(test)]
