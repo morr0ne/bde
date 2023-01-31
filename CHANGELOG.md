@@ -2,6 +2,8 @@
 
 ### Added
 - `ByteString` is now marked with repr(transparent)
+- Implemented `Deserializer` for `Value`
+- Added `from_value` and `to_value` helper functions
 
 ### Removed
 - bool support since it's not actually part of the spec.
