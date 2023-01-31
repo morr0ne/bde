@@ -3,7 +3,8 @@ use std::collections::BTreeMap;
 use serde::{ser::Impossible, Serialize};
 
 use crate::{
-    ser::map_serializer::MapKeySerializer, to_value, value::Value, ByteString, Dictionary, Error,
+    ser::map_key_serializer::MapKeySerializer, to_value, value::Value, ByteString, Dictionary,
+    Error,
 };
 
 impl Serialize for Value {
