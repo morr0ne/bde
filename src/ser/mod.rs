@@ -132,11 +132,11 @@ where
     }
 
     fn serialize_unit(self) -> Result<Self::Ok> {
-        todo!()
+        Err(Error::Unsupported("unit"))
     }
 
     fn serialize_unit_struct(self, _name: &'static str) -> Result<Self::Ok> {
-        todo!()
+        Err(Error::Unsupported("unit"))
     }
 
     fn serialize_unit_variant(
@@ -174,7 +174,7 @@ where
     }
 
     fn serialize_tuple(self, _len: usize) -> Result<Self::SerializeTuple> {
-        todo!()
+        self.serialize_seq(None)
     }
 
     fn serialize_tuple_struct(
@@ -192,7 +192,7 @@ where
         _variant: &'static str,
         _len: usize,
     ) -> Result<Self::SerializeTupleVariant> {
-        todo!()
+        self.serialize_seq(None)
     }
 
     fn serialize_map(self, _len: Option<usize>) -> Result<Self::SerializeMap> {
@@ -283,7 +283,7 @@ impl<'a, W> ser::SerializeTupleVariant for &'a mut Serializer<W> {
 
     type Error = Error;
 
-    fn serialize_field<T: ?Sized>(&mut self, value: &T) -> Result<(), Self::Error>
+    fn serialize_field<T: ?Sized>(&mut self, _value: &T) -> Result<(), Self::Error>
     where
         T: Serialize,
     {
