@@ -12,11 +12,16 @@ pub use ser::ValueSerializer;
 
 pub type Dictionary<V = Value> = BTreeMap<ByteString, V>;
 
+/// Represents any valid Bencode value.
 #[derive(PartialEq, Eq, PartialOrd, Ord)]
 pub enum Value {
+    /// Represents a bencode byte string.
     ByteString(ByteString),
+    /// Represents a bencode integer.
     Integer(Integer),
+    /// Represents a bencode list.
     List(Vec<Value>),
+    /// Represents a bencode dictionary.
     Dictionary(Dictionary),
 }
 
