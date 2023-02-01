@@ -5,7 +5,6 @@ use crate::Result;
 pub(crate) mod map_key_serializer;
 mod map_serializer;
 mod serializer;
-mod unsorted_map_serializer;
 mod unsorted_serializer;
 
 pub use serializer::Serializer;

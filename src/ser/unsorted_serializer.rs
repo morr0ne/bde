@@ -3,7 +3,7 @@ use std::io::Write;
 
 use crate::{Error, Result};
 
-use super::unsorted_map_serializer::UnsortedMapSerializer;
+use super::map_serializer::UnsortedMapSerializer;
 
 pub struct UnsortedSerializer<W> {
     writer: W,
