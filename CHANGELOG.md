@@ -1,3 +1,9 @@
+# 0.2.1(February 1, 2023)
+
+### Fixed
+- Accidental breakage of MapAccess implementation
+
+
 # 0.2.0 (February 1, 2023)
 
 ### Added
