@@ -2,10 +2,7 @@ use crate::{ByteString, Error, Result};
 use num_traits::{cast::AsPrimitive, NumCast, PrimInt, WrappingNeg};
 use paste::paste;
 use serde::{
-    de::{
-        self, value::SeqDeserializer, Deserialize, DeserializeSeed, IntoDeserializer, MapAccess,
-        SeqAccess, Visitor,
-    },
+    de::{self, Deserialize, DeserializeSeed, MapAccess, SeqAccess, Visitor},
     serde_if_integer128,
 };
 
@@ -53,6 +50,7 @@ macro_rules! deserialize_unsigned_integers {
     }
 }
 
+#[derive(Clone)]
 pub struct Deserializer<'de> {
     bytes: &'de [u8],
     index: usize,
@@ -441,21 +439,22 @@ impl<'a, 'de> MapAccess<'de> for MapDeserializer<'a, 'de> {
             }
             b'0'..=b'9' => {
                 // seed.deserialize(&mut *self).map(Some)
-                let key = ByteString::deserialize(&mut *self.deserializer)?;
+                /*
+                HACK: We need to deserialize the key without actually advancing the deserializer buffer.
+                Cloning is a quick way to achive this but suboptimal to say the least.
+                */
+                let key = ByteString::deserialize(&mut (*self.deserializer).clone())?;
 
                 if let Some(last_key) = &self.last_key {
                     if last_key > &key {
                         Err(Error::UnsortedKeys)
                     } else {
-                        let deserializer: SeqDeserializer<std::vec::IntoIter<u8>, Error> =
-                            key.into_vec().into_deserializer();
-                        seed.deserialize(deserializer).map(Some)
+                        seed.deserialize(&mut *self.deserializer).map(Some)
                     }
                 } else {
-                    self.last_key = Some(key.clone());
-                    let deserializer: SeqDeserializer<std::vec::IntoIter<u8>, Error> =
-                        key.into_vec().into_deserializer();
-                    seed.deserialize(deserializer).map(Some)
+                    self.last_key = Some(key);
+
+                    seed.deserialize(&mut *self.deserializer).map(Some)
                 }
             }
             token => Err(Error::unexpected_token(
