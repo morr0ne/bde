@@ -1,4 +1,13 @@
-# 0.2.1(February 1, 2023)
+# 0.2.2 (February 6, 2023)
+
+### Added
+- `ValueSerializer` now serializes structs
+
+### Fixed
+- `serialize_tuple_struct` is now properly implemented
+
+
+# 0.2.1 (February 1, 2023)
 
 ### Fixed
 - Accidental breakage of MapAccess implementation
