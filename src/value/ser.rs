@@ -51,7 +51,7 @@ impl serde::Serializer for ValueSerializer {
 
     type SerializeMap = SerializeMap;
 
-    type SerializeStruct = Impossible<Value, Error>;
+    type SerializeStruct = SerializeMap;
 
     type SerializeStructVariant = Impossible<Value, Error>;
 
@@ -140,20 +140,20 @@ impl serde::Serializer for ValueSerializer {
         self,
         _name: &'static str,
         _variant_index: u32,
-        _variant: &'static str,
+        variant: &'static str,
     ) -> Result<Self::Ok, Self::Error> {
-        todo!()
+        self.serialize_str(variant)
     }
 
     fn serialize_newtype_struct<T: ?Sized>(
         self,
         _name: &'static str,
-        _value: &T,
+        value: &T,
     ) -> Result<Self::Ok, Self::Error>
     where
         T: Serialize,
     {
-        todo!()
+        value.serialize(self)
     }
 
     fn serialize_newtype_variant<T: ?Sized>(
@@ -204,9 +204,9 @@ impl serde::Serializer for ValueSerializer {
     fn serialize_struct(
         self,
         _name: &'static str,
-        _len: usize,
+        len: usize,
     ) -> Result<Self::SerializeStruct, Self::Error> {
-        todo!()
+        self.serialize_map(Some(len))
     }
 
     fn serialize_struct_variant(
@@ -290,6 +290,32 @@ impl serde::ser::SerializeMap for SerializeMap {
     }
 
     fn end(self) -> Result<Self::Ok, Error> {
+        Ok(Value::Dictionary(self.dictionary))
+    }
+}
+
+impl serde::ser::SerializeStruct for SerializeMap {
+    type Ok = Value;
+
+    type Error = Error;
+
+    fn serialize_field<T: ?Sized>(
+        &mut self,
+        key: &'static str,
+        value: &T,
+    ) -> Result<(), Self::Error>
+    where
+        T: Serialize,
+    {
+        let key = key.serialize(MapKeySerializer::new())?;
+        let value = value.serialize(ValueSerializer::new())?;
+
+        self.dictionary.insert(key, value);
+
+        Ok(())
+    }
+
+    fn end(self) -> Result<Self::Ok, Self::Error> {
         Ok(Value::Dictionary(self.dictionary))
     }
 }
