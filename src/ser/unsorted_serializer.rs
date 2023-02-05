@@ -102,8 +102,6 @@ where
 
     fn serialize_char(self, _value: char) -> Result<Self::Ok> {
         Err(Error::Unsupported("char"))
-        // let mut buf = [0; 4];
-        // self.serialize_str(value.encode_utf8(&mut buf))
     }
 
     fn serialize_str(self, value: &str) -> Result<Self::Ok> {
@@ -133,7 +131,7 @@ where
     }
 
     fn serialize_unit_struct(self, _name: &'static str) -> Result<Self::Ok> {
-        Err(Error::Unsupported("unit"))
+        self.serialize_unit()
     }
 
     fn serialize_unit_variant(
@@ -177,9 +175,9 @@ where
     fn serialize_tuple_struct(
         self,
         _name: &'static str,
-        _len: usize,
+        len: usize,
     ) -> Result<Self::SerializeTupleStruct> {
-        todo!()
+        self.serialize_seq(Some(len))
     }
 
     fn serialize_tuple_variant(
