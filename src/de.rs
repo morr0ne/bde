@@ -91,7 +91,7 @@ impl<'de> Deserializer<'de> {
     /// Ensures there aren't any trailing bytes
     /// # Errors
     /// TODO
-    pub fn finish(&mut self) -> Result<()> {
+    pub fn check_trailing_bytes(&mut self) -> Result<()> {
         if self.bytes.len() > self.index {
             Err(Error::TrailingBytes)
         } else {
@@ -198,7 +198,7 @@ where
 {
     let mut deserializer = Deserializer::from_bytes(bytes);
     let value = T::deserialize(&mut deserializer)?;
-    deserializer.finish()?;
+    deserializer.check_trailing_bytes()?;
     Ok(value)
 }
 
