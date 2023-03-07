@@ -1,3 +1,11 @@
+# 0.3.0 (Unreleased)
+
+### Changed
+- `ByteString::into_vec` to `ByteString::inner`
+
+### Removed
+- Removed undocumented methods on ByteString
+
 # 0.2.2 (February 6, 2023)
 
 ### Added
