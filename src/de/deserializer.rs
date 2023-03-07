@@ -190,17 +190,7 @@ impl<'de> Deserializer<'de> {
     }
 }
 
-/// # Errors
-/// TODO
-pub fn from_bytes<'a, T>(bytes: &'a [u8]) -> Result<T>
-where
-    T: Deserialize<'a>,
-{
-    let mut deserializer = Deserializer::from_bytes(bytes);
-    let value = T::deserialize(&mut deserializer)?;
-    deserializer.check_trailing_bytes()?;
-    Ok(value)
-}
+
 
 impl<'de, 'a> de::Deserializer<'de> for &'a mut Deserializer<'de> {
     type Error = Error;
