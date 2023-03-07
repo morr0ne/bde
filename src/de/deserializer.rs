@@ -1,10 +1,12 @@
-use crate::{ByteString, Error, Result};
+use crate::{Error, Result};
 use num_traits::{cast::AsPrimitive, NumCast, PrimInt, WrappingNeg};
 use paste::paste;
 use serde::{
-    de::{self, Deserialize, DeserializeSeed, MapAccess, SeqAccess, Visitor},
+    de::{self, DeserializeSeed, SeqAccess, Visitor},
     serde_if_integer128,
 };
+
+use super::map_deserializer::MapDeserializer;
 
 macro_rules! deserialize_integers {
     ($($ty:ident)+) => {
@@ -52,8 +54,8 @@ macro_rules! deserialize_unsigned_integers {
 
 #[derive(Clone)]
 pub struct Deserializer<'de> {
-    bytes: &'de [u8],
-    index: usize,
+    pub(super) bytes: &'de [u8],
+    pub(super) index: usize,
 }
 
 impl<'de> Deserializer<'de> {
@@ -64,7 +66,7 @@ impl<'de> Deserializer<'de> {
 
     /// Returns the next byte and advances the internal buffer by one.
     /// Returns None if empty.
-    fn next_byte(&mut self) -> Result<u8> {
+    pub(super) fn next_byte(&mut self) -> Result<u8> {
         if let Some(byte) = self.bytes.get(self.index) {
             self.advance();
             Ok(*byte)
@@ -75,7 +77,7 @@ impl<'de> Deserializer<'de> {
 
     /// Look at the next byte without advancing the buffer.
     /// Returns None if empty.
-    fn peek_byte(&mut self) -> Result<u8> {
+    pub(super) fn peek_byte(&mut self) -> Result<u8> {
         if let Some(byte) = self.bytes.get(self.index) {
             Ok(*byte)
         } else {
@@ -84,7 +86,7 @@ impl<'de> Deserializer<'de> {
     }
 
     /// Advances the internal buffer by one
-    fn advance(&mut self) {
+    pub(super) fn advance(&mut self) {
         self.index += 1;
     }
 
@@ -100,7 +102,7 @@ impl<'de> Deserializer<'de> {
     }
 
     /// Parses ascii numbers into as type N until a certain byte is found and discards it
-    fn next_ascii_number_until<N>(&mut self, negative: bool, until: u8) -> Result<N>
+    pub(super) fn next_ascii_number_until<N>(&mut self, negative: bool, until: u8) -> Result<N>
     where
         N: Copy + PrimInt + NumCast + WrappingNeg + 'static,
         u8: AsPrimitive<N>,
@@ -139,7 +141,7 @@ impl<'de> Deserializer<'de> {
     }
 
     /// Parses any integer ignoring the leading "i" bytes
-    fn parse_integer<N>(&mut self, negative: bool) -> Result<N>
+    pub(super) fn parse_integer<N>(&mut self, negative: bool) -> Result<N>
     where
         N: Copy + PrimInt + NumCast + WrappingNeg + 'static,
         u8: AsPrimitive<N>,
@@ -169,7 +171,7 @@ impl<'de> Deserializer<'de> {
     }
 
     /// Parses a byte string
-    fn parse_byte_string(&mut self) -> Result<&'de [u8]> {
+    pub(super) fn parse_byte_string(&mut self) -> Result<&'de [u8]> {
         let len = self.next_ascii_number_until::<usize>(false, b':')?;
 
         if len == 0 {
@@ -189,8 +191,6 @@ impl<'de> Deserializer<'de> {
         }
     }
 }
-
-
 
 impl<'de, 'a> de::Deserializer<'de> for &'a mut Deserializer<'de> {
     type Error = Error;
@@ -398,68 +398,6 @@ impl<'de> SeqAccess<'de> for Deserializer<'de> {
         } else {
             seed.deserialize(&mut *self).map(Some)
         }
-    }
-}
-
-struct MapDeserializer<'a, 'de: 'a> {
-    deserializer: &'a mut Deserializer<'de>,
-    last_key: Option<ByteString>,
-}
-
-impl<'a, 'de> MapDeserializer<'a, 'de> {
-    pub fn new(deserializer: &'a mut Deserializer<'de>) -> Self {
-        Self {
-            deserializer,
-            last_key: None,
-        }
-    }
-}
-
-impl<'a, 'de> MapAccess<'de> for MapDeserializer<'a, 'de> {
-    type Error = Error;
-
-    fn next_key_seed<K>(&mut self, seed: K) -> Result<Option<K::Value>, Self::Error>
-    where
-        K: DeserializeSeed<'de>,
-    {
-        match self.deserializer.peek_byte()? {
-            b'e' => {
-                self.deserializer.advance();
-                Ok(None)
-            }
-            b'0'..=b'9' => {
-                // seed.deserialize(&mut *self).map(Some)
-                /*
-                HACK: We need to deserialize the key without actually advancing the deserializer buffer.
-                Cloning is a quick way to achive this but suboptimal to say the least.
-                */
-                let key = ByteString::deserialize(&mut (*self.deserializer).clone())?;
-
-                if let Some(last_key) = &self.last_key {
-                    if last_key > &key {
-                        Err(Error::UnsortedKeys)
-                    } else {
-                        seed.deserialize(&mut *self.deserializer).map(Some)
-                    }
-                } else {
-                    self.last_key = Some(key);
-
-                    seed.deserialize(&mut *self.deserializer).map(Some)
-                }
-            }
-            token => Err(Error::unexpected_token(
-                "number between 0-9",
-                token,
-                self.deserializer.index,
-            )),
-        }
-    }
-
-    fn next_value_seed<V>(&mut self, seed: V) -> Result<V::Value, Self::Error>
-    where
-        V: DeserializeSeed<'de>,
-    {
-        seed.deserialize(&mut *self.deserializer)
     }
 }
 

@@ -3,6 +3,7 @@ use serde::Deserialize;
 use crate::Result;
 
 mod deserializer;
+mod map_deserializer;
 
 pub use deserializer::Deserializer;
 
