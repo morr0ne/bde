@@ -12,14 +12,13 @@ include = ["src/**/*.rs", "README.md", "LICENSE-APACHE", "LICENSE-MIT", "LICENSE
 
 [dependencies]
 num-traits = "0.2.15"
-paste = "1.0.7"
-serde = "1.0.152"
-thiserror = "1.0.38"
+paste = "1.0.12"
+serde = "1.0.153"
+thiserror = "1.0.39"
 
 [dev-dependencies]
-serde_derive = "1.0.152"
-serde_bencode = "0.2.3"
 color-eyre = "0.6.2"
 serde_bytes = "0.11.8"
-serde_test = "1.0.152"
+serde_derive = "1.0.153"
+serde_test = "1.0.153"
 url = { version = "2.3.1", features = ["serde"] }
