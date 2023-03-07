@@ -167,7 +167,7 @@ impl<'de> Visitor<'de> for ByteStringVisitor {
     type Value = ByteString;
 
     fn expecting(&self, formatter: &mut fmt::Formatter) -> fmt::Result {
-        formatter.write_str("byte array")
+        formatter.write_str("byte string")
     }
 
     fn visit_seq<V>(self, mut visitor: V) -> Result<ByteString, V::Error>
