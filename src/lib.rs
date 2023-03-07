@@ -1,8 +1,8 @@
 mod byte_string;
-mod de;
-mod error;
-mod ser;
-mod value;
+pub mod de;
+pub mod error;
+pub mod ser;
+pub mod value;
 
 #[doc(inline)]
 pub use byte_string::ByteString;
