@@ -20,7 +20,6 @@ of the Software.
 */
 
 use std::{
-    boxed::Box,
     cmp::{self, Ordering},
     fmt::{self, Debug},
     hash::{Hash, Hasher},
