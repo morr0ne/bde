@@ -1,7 +1,8 @@
 # 0.3.0 (Unreleased)
 
 ### Changed
-- `ByteString::into_vec` to `ByteString::inner`
+- Renamed `ByteString::into_vec` to `ByteString::inner`
+- Renamed `Deserializer::finish` to `Deserializer::check_trailing_bytes`
 
 ### Removed
 - Removed undocumented methods on ByteString
