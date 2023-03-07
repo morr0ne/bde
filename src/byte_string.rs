@@ -50,29 +50,17 @@ impl ByteString {
 
     /// Construct a new, empty `ByteString` with the specified capacity.
     pub fn with_capacity(capacity: usize) -> Self {
-        ByteString::from(Vec::with_capacity(capacity))
+        Self::from_vec(Vec::with_capacity(capacity))
     }
 
+    /// Wraps an existing `Vec` into a `ByteString`
     pub const fn from_vec(vec: Vec<u8>) -> Self {
         Self { bytes: vec }
     }
 
-    /// Unwrap the vector of byte underlying this `ByteString`.
-    pub fn into_vec(self) -> Vec<u8> {
+    /// Return the inner vector
+    pub fn inner(self) -> Vec<u8> {
         self.bytes
-    }
-
-    // This would hit "cannot move out of borrowed content" if invoked through
-    // the Deref impl; make it just work.
-    #[doc(hidden)]
-    pub fn into_boxed_slice(self) -> Box<[u8]> {
-        self.bytes.into_boxed_slice()
-    }
-
-    #[doc(hidden)]
-    #[allow(clippy::should_implement_trait)]
-    pub fn into_iter(self) -> <Vec<u8> as IntoIterator>::IntoIter {
-        self.bytes.into_iter()
     }
 }
 
