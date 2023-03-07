@@ -104,7 +104,7 @@ impl<'de> Deserializer<'de> {
     where
         N: Copy + PrimInt + NumCast + WrappingNeg + 'static,
         u8: AsPrimitive<N>,
-        i8: num_traits::AsPrimitive<N>,
+        i8: AsPrimitive<N>,
     {
         let mut significand = N::zero();
 
@@ -143,7 +143,7 @@ impl<'de> Deserializer<'de> {
     where
         N: Copy + PrimInt + NumCast + WrappingNeg + 'static,
         u8: AsPrimitive<N>,
-        i8: num_traits::AsPrimitive<N>,
+        i8: AsPrimitive<N>,
     {
         // Check the first byte, if none then we hit eof too soon
         match self.peek_byte()? {
@@ -428,7 +428,7 @@ impl<'a, 'de> MapDeserializer<'a, 'de> {
 impl<'a, 'de> MapAccess<'de> for MapDeserializer<'a, 'de> {
     type Error = Error;
 
-    fn next_key_seed<K>(&mut self, seed: K) -> std::result::Result<Option<K::Value>, Self::Error>
+    fn next_key_seed<K>(&mut self, seed: K) -> Result<Option<K::Value>, Self::Error>
     where
         K: DeserializeSeed<'de>,
     {
@@ -465,7 +465,7 @@ impl<'a, 'de> MapAccess<'de> for MapDeserializer<'a, 'de> {
         }
     }
 
-    fn next_value_seed<V>(&mut self, seed: V) -> std::result::Result<V::Value, Self::Error>
+    fn next_value_seed<V>(&mut self, seed: V) -> Result<V::Value, Self::Error>
     where
         V: DeserializeSeed<'de>,
     {
