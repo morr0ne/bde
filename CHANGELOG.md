@@ -3,6 +3,7 @@
 ### Added
 - Added `as_*` and `is_*` helper methods to `Value`
 - Added `Display` impl to `Integer`
+- Added  `Index` and `IndexMut` impls to `ByteString`
 
 ### Changed
 - Renamed `ByteString::into_vec` to `ByteString::inner`
