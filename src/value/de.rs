@@ -43,7 +43,7 @@ impl<'de> Deserialize<'de> for Value {
             where
                 E: serde::de::Error,
             {
-                Ok(Value::ByteString(ByteString::from(value)))
+                Ok(Value::ByteString(value.into()))
             }
 
             fn visit_some<D>(self, deserializer: D) -> Result<Self::Value, D::Error>
