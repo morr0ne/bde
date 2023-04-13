@@ -1,5 +1,9 @@
 # 0.3.0 (Unreleased)
 
+### Added
+- Added `as_*` and `is_*` helper methods to `Value`
+- Added `Display` impl to `Integer`
+
 ### Changed
 - Renamed `ByteString::into_vec` to `ByteString::inner`
 - Renamed `Deserializer::finish` to `Deserializer::check_trailing_bytes`
