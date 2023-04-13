@@ -19,14 +19,13 @@ shall be included in all copies or substantial portions
 of the Software.
 */
 
-use std::{
+use core::{
     cmp::{self, Ordering},
     fmt::{self, Debug},
     hash::{Hash, Hasher},
     ops::{Deref, DerefMut},
-    string::String,
-    vec::Vec,
 };
+use std::{string::String, vec::Vec};
 
 use serde::{
     de::{Deserialize, Deserializer, Error, SeqAccess, Visitor},

@@ -1,7 +1,7 @@
 use serde::{ser, Serialize};
 use std::io::Write;
 
-use crate::Error;
+use crate::{Error, Result};
 
 use super::{map_serializer::MapSerializer, unsorted_serializer::UnsortedSerializer};
 
@@ -50,81 +50,78 @@ where
     type SerializeStruct = MapSerializer<'a, W>;
     type SerializeStructVariant = &'a mut UnsortedSerializer<W>;
 
-    fn serialize_bool(self, value: bool) -> std::result::Result<Self::Ok, Self::Error> {
+    fn serialize_bool(self, value: bool) -> Result<Self::Ok> {
         self.unsorted_serializer.serialize_bool(value)
     }
 
-    fn serialize_i8(self, value: i8) -> std::result::Result<Self::Ok, Self::Error> {
+    fn serialize_i8(self, value: i8) -> Result<Self::Ok> {
         self.unsorted_serializer.serialize_i8(value)
     }
 
-    fn serialize_i16(self, value: i16) -> std::result::Result<Self::Ok, Self::Error> {
+    fn serialize_i16(self, value: i16) -> Result<Self::Ok> {
         self.unsorted_serializer.serialize_i16(value)
     }
 
-    fn serialize_i32(self, value: i32) -> std::result::Result<Self::Ok, Self::Error> {
+    fn serialize_i32(self, value: i32) -> Result<Self::Ok> {
         self.unsorted_serializer.serialize_i32(value)
     }
 
-    fn serialize_i64(self, value: i64) -> std::result::Result<Self::Ok, Self::Error> {
+    fn serialize_i64(self, value: i64) -> Result<Self::Ok> {
         self.unsorted_serializer.serialize_i64(value)
     }
 
-    fn serialize_u8(self, value: u8) -> std::result::Result<Self::Ok, Self::Error> {
+    fn serialize_u8(self, value: u8) -> Result<Self::Ok> {
         self.unsorted_serializer.serialize_u8(value)
     }
 
-    fn serialize_u16(self, value: u16) -> std::result::Result<Self::Ok, Self::Error> {
+    fn serialize_u16(self, value: u16) -> Result<Self::Ok> {
         self.unsorted_serializer.serialize_u16(value)
     }
 
-    fn serialize_u32(self, value: u32) -> std::result::Result<Self::Ok, Self::Error> {
+    fn serialize_u32(self, value: u32) -> Result<Self::Ok> {
         self.unsorted_serializer.serialize_u32(value)
     }
 
-    fn serialize_u64(self, value: u64) -> std::result::Result<Self::Ok, Self::Error> {
+    fn serialize_u64(self, value: u64) -> Result<Self::Ok> {
         self.unsorted_serializer.serialize_u64(value)
     }
 
-    fn serialize_f32(self, value: f32) -> std::result::Result<Self::Ok, Self::Error> {
+    fn serialize_f32(self, value: f32) -> Result<Self::Ok> {
         self.unsorted_serializer.serialize_f32(value)
     }
 
-    fn serialize_f64(self, value: f64) -> std::result::Result<Self::Ok, Self::Error> {
+    fn serialize_f64(self, value: f64) -> Result<Self::Ok> {
         self.unsorted_serializer.serialize_f64(value)
     }
 
-    fn serialize_char(self, value: char) -> std::result::Result<Self::Ok, Self::Error> {
+    fn serialize_char(self, value: char) -> Result<Self::Ok> {
         self.unsorted_serializer.serialize_char(value)
     }
 
-    fn serialize_str(self, value: &str) -> std::result::Result<Self::Ok, Self::Error> {
+    fn serialize_str(self, value: &str) -> Result<Self::Ok> {
         self.unsorted_serializer.serialize_str(value)
     }
 
-    fn serialize_bytes(self, value: &[u8]) -> std::result::Result<Self::Ok, Self::Error> {
+    fn serialize_bytes(self, value: &[u8]) -> Result<Self::Ok> {
         self.unsorted_serializer.serialize_bytes(value)
     }
 
-    fn serialize_none(self) -> std::result::Result<Self::Ok, Self::Error> {
+    fn serialize_none(self) -> Result<Self::Ok> {
         self.unsorted_serializer.serialize_none()
     }
 
-    fn serialize_some<T: ?Sized>(self, value: &T) -> std::result::Result<Self::Ok, Self::Error>
+    fn serialize_some<T: ?Sized>(self, value: &T) -> Result<Self::Ok>
     where
         T: Serialize,
     {
         self.unsorted_serializer.serialize_some(value)
     }
 
-    fn serialize_unit(self) -> std::result::Result<Self::Ok, Self::Error> {
+    fn serialize_unit(self) -> Result<Self::Ok> {
         self.unsorted_serializer.serialize_unit()
     }
 
-    fn serialize_unit_struct(
-        self,
-        name: &'static str,
-    ) -> std::result::Result<Self::Ok, Self::Error> {
+    fn serialize_unit_struct(self, name: &'static str) -> Result<Self::Ok> {
         self.unsorted_serializer.serialize_unit_struct(name)
     }
 
@@ -133,16 +130,12 @@ where
         name: &'static str,
         variant_index: u32,
         variant: &'static str,
-    ) -> std::result::Result<Self::Ok, Self::Error> {
+    ) -> Result<Self::Ok> {
         self.unsorted_serializer
             .serialize_unit_variant(name, variant_index, variant)
     }
 
-    fn serialize_newtype_struct<T: ?Sized>(
-        self,
-        name: &'static str,
-        value: &T,
-    ) -> std::result::Result<Self::Ok, Self::Error>
+    fn serialize_newtype_struct<T: ?Sized>(self, name: &'static str, value: &T) -> Result<Self::Ok>
     where
         T: Serialize,
     {
@@ -156,7 +149,7 @@ where
         variant_index: u32,
         variant: &'static str,
         value: &T,
-    ) -> std::result::Result<Self::Ok, Self::Error>
+    ) -> Result<Self::Ok>
     where
         T: Serialize,
     {
@@ -164,14 +157,11 @@ where
             .serialize_newtype_variant(name, variant_index, variant, value)
     }
 
-    fn serialize_seq(
-        self,
-        len: Option<usize>,
-    ) -> std::result::Result<Self::SerializeSeq, Self::Error> {
+    fn serialize_seq(self, len: Option<usize>) -> Result<Self::SerializeSeq> {
         self.unsorted_serializer.serialize_seq(len)
     }
 
-    fn serialize_tuple(self, len: usize) -> std::result::Result<Self::SerializeTuple, Self::Error> {
+    fn serialize_tuple(self, len: usize) -> Result<Self::SerializeTuple> {
         self.unsorted_serializer.serialize_tuple(len)
     }
 
@@ -179,7 +169,7 @@ where
         self,
         name: &'static str,
         len: usize,
-    ) -> std::result::Result<Self::SerializeTupleStruct, Self::Error> {
+    ) -> Result<Self::SerializeTupleStruct> {
         self.unsorted_serializer.serialize_tuple_struct(name, len)
     }
 
@@ -189,24 +179,17 @@ where
         variant_index: u32,
         variant: &'static str,
         len: usize,
-    ) -> std::result::Result<Self::SerializeTupleVariant, Self::Error> {
+    ) -> Result<Self::SerializeTupleVariant> {
         self.unsorted_serializer
             .serialize_tuple_variant(name, variant_index, variant, len)
     }
 
-    fn serialize_map(
-        self,
-        _len: Option<usize>,
-    ) -> std::result::Result<Self::SerializeMap, Self::Error> {
+    fn serialize_map(self, _len: Option<usize>) -> Result<Self::SerializeMap> {
         self.write_all(b"d")?;
         Ok(MapSerializer::new(self))
     }
 
-    fn serialize_struct(
-        self,
-        _name: &'static str,
-        _len: usize,
-    ) -> std::result::Result<Self::SerializeStruct, Self::Error> {
+    fn serialize_struct(self, _name: &'static str, _len: usize) -> Result<Self::SerializeStruct> {
         self.serialize_map(None) // There is no reason to pass along the len since we are using a BTreeSet
     }
 
@@ -216,7 +199,7 @@ where
         variant_index: u32,
         variant: &'static str,
         len: usize,
-    ) -> std::result::Result<Self::SerializeStructVariant, Self::Error> {
+    ) -> Result<Self::SerializeStructVariant> {
         self.unsorted_serializer
             .serialize_struct_variant(name, variant_index, variant, len)
     }

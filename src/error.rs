@@ -1,7 +1,7 @@
+use core::{fmt::Display, str::Utf8Error};
 use serde::{de, ser};
-use std::{fmt::Display, str::Utf8Error};
 
-pub type Result<T, E = Error> = std::result::Result<T, E>;
+pub type Result<T, E = Error> = core::result::Result<T, E>;
 
 #[derive(Debug, thiserror::Error)]
 pub enum Error {

@@ -112,7 +112,7 @@ where
 
     type Error = Error;
 
-    fn serialize_key<T: ?Sized>(&mut self, key: &T) -> std::result::Result<(), Self::Error>
+    fn serialize_key<T: ?Sized>(&mut self, key: &T) -> Result<()>
     where
         T: Serialize,
     {
@@ -120,14 +120,14 @@ where
         key.serialize(&mut *self.serializer)
     }
 
-    fn serialize_value<T: ?Sized>(&mut self, value: &T) -> std::result::Result<(), Self::Error>
+    fn serialize_value<T: ?Sized>(&mut self, value: &T) -> Result<()>
     where
         T: Serialize,
     {
         value.serialize(&mut *self.serializer)
     }
 
-    fn end(self) -> std::result::Result<Self::Ok, Self::Error> {
+    fn end(self) -> Result<Self::Ok> {
         self.serializer.write_all(b"e")?;
 
         Ok(())
