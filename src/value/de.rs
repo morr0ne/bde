@@ -94,15 +94,15 @@ impl<'de> Deserialize<'de> for Value {
 impl<'de> serde::Deserializer<'de> for Value {
     type Error = Error;
 
-    fn deserialize_any<V>(self, _visitor: V) -> Result<V::Value, Self::Error>
+    fn deserialize_any<V>(self, visitor: V) -> Result<V::Value, Self::Error>
     where
         V: Visitor<'de>,
     {
         match self {
-            Value::ByteString(_byte_string) => todo!(),
-            Value::Integer(_integer) => todo!(),
-            Value::List(_list) => todo!(),
-            Value::Dictionary(_dictionary) => todo!(),
+            Value::ByteString(byte_string) => visitor.visit_bytes(&byte_string),
+            Value::Integer(integer) => todo!(),
+            Value::List(list) => todo!(),
+            Value::Dictionary(dictionary) => todo!(),
         }
     }
 
@@ -221,11 +221,11 @@ impl<'de> serde::Deserializer<'de> for Value {
         }
     }
 
-    fn deserialize_option<V>(self, _visitor: V) -> Result<V::Value, Self::Error>
+    fn deserialize_option<V>(self, visitor: V) -> Result<V::Value, Self::Error>
     where
         V: Visitor<'de>,
     {
-        todo!()
+        visitor.visit_some(self)
     }
 
     fn deserialize_unit<V>(self, _visitor: V) -> Result<V::Value, Self::Error>
