@@ -47,6 +47,52 @@ impl Debug for Value {
     }
 }
 
+impl Value {
+    pub const fn is_byte_string(&self) -> bool {
+        matches!(self, Self::ByteString(_))
+    }
+
+    pub const fn is_integer(&self) -> bool {
+        matches!(self, Self::Integer(_))
+    }
+
+    pub const fn is_list(&self) -> bool {
+        matches!(self, Self::Integer(_))
+    }
+
+    pub const fn is_dictionary(&self) -> bool {
+        matches!(self, Self::Dictionary(_))
+    }
+
+    pub const fn as_byte_string(&self) -> Option<&ByteString> {
+        match self {
+            Self::ByteString(byte_string) => Some(byte_string),
+            _ => None,
+        }
+    }
+
+    pub const fn as_integer(&self) -> Option<&Integer> {
+        match self {
+            Self::Integer(integer) => Some(integer),
+            _ => None,
+        }
+    }
+
+    pub const fn as_list(&self) -> Option<&Vec<Value>> {
+        match self {
+            Self::List(list) => Some(list),
+            _ => None,
+        }
+    }
+
+    pub const fn as_dictionary(&self) -> Option<&Dictionary> {
+        match self {
+            Self::Dictionary(dictionary) => Some(dictionary),
+            _ => None,
+        }
+    }
+}
+
 pub fn to_value<T>(value: T) -> Result<Value, Error>
 where
     T: Serialize,
