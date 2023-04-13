@@ -38,13 +38,13 @@ use serde::{
 #[derive(Clone, Default, Eq, Ord)]
 #[repr(transparent)]
 pub struct ByteString {
-    bytes: Vec<u8>,
+    inner: Vec<u8>,
 }
 
 impl ByteString {
     /// Construct a new, empty `ByteString`.
     pub const fn new() -> Self {
-        Self { bytes: Vec::new() }
+        Self { inner: Vec::new() }
     }
 
     /// Construct a new, empty `ByteString` with the specified capacity.
@@ -54,12 +54,12 @@ impl ByteString {
 
     /// Wraps an existing `Vec` into a `ByteString`
     pub const fn from_vec(vec: Vec<u8>) -> Self {
-        Self { bytes: vec }
+        Self { inner: vec }
     }
 
     /// Return the inner vector
     pub fn inner(self) -> Vec<u8> {
-        self.bytes
+        self.inner
     }
 }
 
@@ -77,13 +77,13 @@ impl<T: Into<Vec<u8>>> From<T> for ByteString {
 
 impl AsRef<[u8]> for ByteString {
     fn as_ref(&self) -> &[u8] {
-        &self.bytes
+        &self.inner
     }
 }
 
 impl AsMut<[u8]> for ByteString {
     fn as_mut(&mut self) -> &mut [u8] {
-        &mut self.bytes
+        &mut self.inner
     }
 }
 
@@ -91,13 +91,13 @@ impl Deref for ByteString {
     type Target = Vec<u8>;
 
     fn deref(&self) -> &Self::Target {
-        &self.bytes
+        &self.inner
     }
 }
 
 impl DerefMut for ByteString {
     fn deref_mut(&mut self) -> &mut Self::Target {
-        &mut self.bytes
+        &mut self.inner
     }
 }
 
@@ -121,7 +121,7 @@ where
 
 impl Hash for ByteString {
     fn hash<H: Hasher>(&self, state: &mut H) {
-        self.bytes.hash(state);
+        self.inner.hash(state);
     }
 }
 
@@ -130,7 +130,7 @@ impl IntoIterator for ByteString {
     type IntoIter = <Vec<u8> as IntoIterator>::IntoIter;
 
     fn into_iter(self) -> Self::IntoIter {
-        self.bytes.into_iter()
+        self.inner.into_iter()
     }
 }
 
@@ -139,7 +139,7 @@ impl<'a> IntoIterator for &'a ByteString {
     type IntoIter = <&'a [u8] as IntoIterator>::IntoIter;
 
     fn into_iter(self) -> Self::IntoIter {
-        self.bytes.iter()
+        self.inner.iter()
     }
 }
 
@@ -148,7 +148,7 @@ impl<'a> IntoIterator for &'a mut ByteString {
     type IntoIter = <&'a mut [u8] as IntoIterator>::IntoIter;
 
     fn into_iter(self) -> Self::IntoIter {
-        self.bytes.iter_mut()
+        self.inner.iter_mut()
     }
 }
 
@@ -157,7 +157,7 @@ impl Serialize for ByteString {
     where
         S: Serializer,
     {
-        serializer.serialize_bytes(&self.bytes)
+        serializer.serialize_bytes(&self.inner)
     }
 }
 
