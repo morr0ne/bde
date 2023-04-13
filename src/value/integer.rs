@@ -1,5 +1,5 @@
 use serde::Serialize;
-use std::fmt::Debug;
+use std::fmt::{Debug, Display};
 
 #[derive(PartialEq, Eq, PartialOrd, Ord)]
 pub struct Integer {
@@ -8,9 +8,15 @@ pub struct Integer {
 
 impl Debug for Integer {
     fn fmt(&self, f: &mut std::fmt::Formatter<'_>) -> std::fmt::Result {
+        write!(f, "Integer({})", self)
+    }
+}
+
+impl Display for Integer {
+    fn fmt(&self, f: &mut std::fmt::Formatter<'_>) -> std::fmt::Result {
         match self.inner {
-            IntegerType::Negative(n) => write!(f, "{n}"),
-            IntegerType::Positive(n) => write!(f, "{n}"),
+            IntegerType::Negative(n) => f.write_str(itoa::Buffer::new().format(n)),
+            IntegerType::Positive(n) => f.write_str(itoa::Buffer::new().format(n)),
         }
     }
 }
