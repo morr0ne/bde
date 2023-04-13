@@ -32,7 +32,7 @@ impl Debug for Value {
                 .debug_tuple("ByteString")
                 .field(&String::from_utf8_lossy(value))
                 .finish(),
-            Self::Integer(value) => f.debug_tuple("Integer").field(value).finish(),
+            Self::Integer(value) => Debug::fmt(value, f),
             Self::List(value) => {
                 f.write_str("List(")?;
                 Debug::fmt(value, f)?;
