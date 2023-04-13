@@ -25,7 +25,12 @@ use core::{
     hash::{Hash, Hasher},
     ops::{Deref, DerefMut},
 };
-use std::{string::String, vec::Vec};
+use std::{
+    ops::{Index, IndexMut},
+    slice::SliceIndex,
+    string::String,
+    vec::Vec,
+};
 
 use serde::{
     de::{Deserialize, Deserializer, Error, SeqAccess, Visitor},
@@ -148,6 +153,20 @@ impl<'a> IntoIterator for &'a mut ByteString {
 
     fn into_iter(self) -> Self::IntoIter {
         self.inner.iter_mut()
+    }
+}
+
+impl<I: SliceIndex<[u8]>> Index<I> for ByteString {
+    type Output = I::Output;
+
+    fn index(&self, index: I) -> &Self::Output {
+        self.inner.index(index)
+    }
+}
+
+impl<I: SliceIndex<[u8]>> IndexMut<I> for ByteString {
+    fn index_mut(&mut self, index: I) -> &mut Self::Output {
+        self.inner.index_mut(index)
     }
 }
 
