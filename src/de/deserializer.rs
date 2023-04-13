@@ -1,4 +1,3 @@
-use crate::{Error, Result};
 use num_traits::{cast::AsPrimitive, NumCast, PrimInt, WrappingNeg};
 use paste::paste;
 use serde::{
@@ -7,6 +6,7 @@ use serde::{
 };
 
 use super::map_deserializer::MapDeserializer;
+use crate::{Error, Result};
 
 macro_rules! deserialize_integers {
     ($($ty:ident)+) => {
@@ -244,7 +244,7 @@ impl<'de, 'a> de::Deserializer<'de> for &'a mut Deserializer<'de> {
     where
         V: Visitor<'de>,
     {
-        unimplemented!() // TODO: Parse string and check if it's of len 1
+        Err(Error::Unsupported("char"))
     }
 
     fn deserialize_str<V>(self, visitor: V) -> Result<V::Value>
@@ -286,14 +286,14 @@ impl<'de, 'a> de::Deserializer<'de> for &'a mut Deserializer<'de> {
     where
         V: Visitor<'de>,
     {
-        todo!() // TODO: Figure out what to do here.
+        Err(Error::Unsupported("()"))
     }
 
     fn deserialize_unit_struct<V>(self, _name: &'static str, _visitor: V) -> Result<V::Value>
     where
         V: Visitor<'de>,
     {
-        todo!() // TODO: Figure out what to do here.
+        Err(Error::Unsupported("()")) // TODO: Use the name to provide better errors
     }
 
     fn deserialize_newtype_struct<V>(self, _name: &'static str, visitor: V) -> Result<V::Value>
