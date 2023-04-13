@@ -11,7 +11,7 @@ repository = "https://github.com/morr0ne/bde"
 include = ["src/**/*.rs", "README.md", "LICENSE-APACHE", "LICENSE-MIT", "LICENSE-ZLIB"]
 
 [dependencies]
-itoa = { version = "1.0.6", features = ["no-panic"] }
+itoa = "1.0.6"
 num-traits = "0.2.15"
 paste = "1.0.12"
 serde = "1.0.160"
