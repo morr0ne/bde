@@ -26,8 +26,10 @@ use core::{
     ops::{Deref, DerefMut},
 };
 use std::{
+    convert::Infallible,
     ops::{Index, IndexMut},
     slice::SliceIndex,
+    str::FromStr,
     string::String,
     vec::Vec,
 };
@@ -167,6 +169,14 @@ impl<I: SliceIndex<[u8]>> Index<I> for ByteString {
 impl<I: SliceIndex<[u8]>> IndexMut<I> for ByteString {
     fn index_mut(&mut self, index: I) -> &mut Self::Output {
         self.inner.index_mut(index)
+    }
+}
+
+impl FromStr for ByteString {
+    type Err = Infallible;
+
+    fn from_str(s: &str) -> Result<Self, Self::Err> {
+        Ok(Self::from(s))
     }
 }
 
