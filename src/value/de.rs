@@ -100,9 +100,9 @@ impl<'de> serde::Deserializer<'de> for Value {
     {
         match self {
             Value::ByteString(byte_string) => visitor.visit_bytes(&byte_string),
-            Value::Integer(integer) => todo!(),
-            Value::List(list) => todo!(),
-            Value::Dictionary(dictionary) => todo!(),
+            Value::Integer(_integer) => todo!(),
+            Value::List(_list) => todo!(),
+            Value::Dictionary(_dictionary) => todo!(),
         }
     }
 
