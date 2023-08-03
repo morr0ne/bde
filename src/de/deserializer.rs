@@ -1,5 +1,4 @@
 use num_traits::{cast::AsPrimitive, NumCast, PrimInt, WrappingNeg};
-use paste::paste;
 use serde::{
     de::{self, DeserializeSeed, SeqAccess, Visitor},
     serde_if_integer128,
@@ -7,50 +6,6 @@ use serde::{
 
 use super::map_deserializer::MapDeserializer;
 use crate::{Error, Result};
-
-macro_rules! deserialize_integers {
-    ($($ty:ident)+) => {
-        $(
-            paste! {
-                fn [<deserialize_$ty>]<V>(self, visitor: V) -> Result<V::Value>
-                where
-                    V: de::Visitor<'de>,
-                {
-                    if let b'i' = self.next_byte()? {
-                        match self.peek_byte()? {
-                            b'-' => {
-                                self.advance();
-                                visitor.[<visit_$ty>](self.parse_integer(true)?)
-                            }
-                            _ => visitor.[<visit_$ty>](self.parse_integer(false)?),
-                        }
-                    } else {
-                        Err(Error::InvalidType)
-                    }
-                }
-            }
-        )*
-    }
-}
-
-macro_rules! deserialize_unsigned_integers {
-    ($($ty:ident)+) => {
-        $(
-            paste! {
-                fn [<deserialize_$ty>]<V>(self, visitor: V) -> Result<V::Value>
-                where
-                    V: Visitor<'de>,
-                {
-                    if let b'i' = self.next_byte()? {
-                        visitor.[<visit_$ty>](self.parse_integer(false)?)
-                    } else {
-                        Err(Error::InvalidType)
-                    }
-                }
-            }
-        )*
-    }
-}
 
 #[derive(Clone)]
 pub struct Deserializer<'de> {
@@ -219,11 +174,147 @@ impl<'de, 'a> de::Deserializer<'de> for &'a mut Deserializer<'de> {
         Err(Error::Unsupported("bool"))
     }
 
-    deserialize_integers!(i8 i16 i32 i64);
-    deserialize_unsigned_integers!(u8 u16 u32 u64);
+    fn deserialize_i8<V>(self, visitor: V) -> Result<V::Value>
+    where
+        V: de::Visitor<'de>,
+    {
+        if let b'i' = self.next_byte()? {
+            match self.peek_byte()? {
+                b'-' => {
+                    self.advance();
+                    visitor.visit_i8(self.parse_integer(true)?)
+                }
+                _ => visitor.visit_i8(self.parse_integer(false)?),
+            }
+        } else {
+            Err(Error::InvalidType)
+        }
+    }
+
+    fn deserialize_i16<V>(self, visitor: V) -> Result<V::Value>
+    where
+        V: de::Visitor<'de>,
+    {
+        if let b'i' = self.next_byte()? {
+            match self.peek_byte()? {
+                b'-' => {
+                    self.advance();
+                    visitor.visit_i16(self.parse_integer(true)?)
+                }
+                _ => visitor.visit_i16(self.parse_integer(false)?),
+            }
+        } else {
+            Err(Error::InvalidType)
+        }
+    }
+
+    fn deserialize_i32<V>(self, visitor: V) -> Result<V::Value>
+    where
+        V: de::Visitor<'de>,
+    {
+        if let b'i' = self.next_byte()? {
+            match self.peek_byte()? {
+                b'-' => {
+                    self.advance();
+                    visitor.visit_i32(self.parse_integer(true)?)
+                }
+                _ => visitor.visit_i32(self.parse_integer(false)?),
+            }
+        } else {
+            Err(Error::InvalidType)
+        }
+    }
+
+    fn deserialize_i64<V>(self, visitor: V) -> Result<V::Value>
+    where
+        V: de::Visitor<'de>,
+    {
+        if let b'i' = self.next_byte()? {
+            match self.peek_byte()? {
+                b'-' => {
+                    self.advance();
+                    visitor.visit_i64(self.parse_integer(true)?)
+                }
+                _ => visitor.visit_i64(self.parse_integer(false)?),
+            }
+        } else {
+            Err(Error::InvalidType)
+        }
+    }
+
+    fn deserialize_u8<V>(self, visitor: V) -> Result<V::Value>
+    where
+        V: Visitor<'de>,
+    {
+        if let b'i' = self.next_byte()? {
+            visitor.visit_u8(self.parse_integer(false)?)
+        } else {
+            Err(Error::InvalidType)
+        }
+    }
+
+    fn deserialize_u16<V>(self, visitor: V) -> Result<V::Value>
+    where
+        V: Visitor<'de>,
+    {
+        if let b'i' = self.next_byte()? {
+            visitor.visit_u16(self.parse_integer(false)?)
+        } else {
+            Err(Error::InvalidType)
+        }
+    }
+
+    fn deserialize_u32<V>(self, visitor: V) -> Result<V::Value>
+    where
+        V: Visitor<'de>,
+    {
+        if let b'i' = self.next_byte()? {
+            visitor.visit_u32(self.parse_integer(false)?)
+        } else {
+            Err(Error::InvalidType)
+        }
+    }
+
+    fn deserialize_u64<V>(self, visitor: V) -> Result<V::Value>
+    where
+        V: Visitor<'de>,
+    {
+        if let b'i' = self.next_byte()? {
+            visitor.visit_u64(self.parse_integer(false)?)
+        } else {
+            Err(Error::InvalidType)
+        }
+    }
+
     serde_if_integer128! {
-        deserialize_unsigned_integers!(u128);
-        deserialize_integers!(i128);
+
+        fn deserialize_u128<V>(self, visitor: V) -> Result<V::Value>
+        where
+            V: Visitor<'de>,
+        {
+            if let b'i' = self.next_byte()? {
+                visitor.visit_u128(self.parse_integer(false)?)
+            } else {
+                Err(Error::InvalidType)
+            }
+        }
+
+        fn deserialize_i128<V>(self, visitor: V) -> Result<V::Value>
+        where
+            V: de::Visitor<'de>,
+        {
+            if let b'i' = self.next_byte()? {
+                match self.peek_byte()? {
+                    b'-' => {
+                        self.advance();
+                        visitor.visit_i128(self.parse_integer(true)?)
+                    }
+                    _ => visitor.visit_i128(self.parse_integer(false)?),
+                }
+            } else {
+                Err(Error::InvalidType)
+            }
+        }
     }
 
     fn deserialize_f32<V>(self, _visitor: V) -> Result<V::Value>

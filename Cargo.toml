@@ -13,7 +13,6 @@ include = ["src/**/*.rs", "README.md", "LICENSE-APACHE", "LICENSE-MIT", "LICENSE
 [dependencies]
 itoa = "1.0.9"
 num-traits = "0.2.16"
-paste = "1.0.14"
 serde = { version = "1.0.180", default-features = false }
 thiserror = "1.0.44"
 
