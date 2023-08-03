@@ -1,12 +1,10 @@
+use anyhow::Result;
 use bde::Value;
-use color_eyre::Result;
 use serde_derive::{Deserialize, Serialize};
 use std::fs;
 use url::Url;
 
 fn main() -> Result<()> {
-    color_eyre::install()?;
-
     let bytes = b"d6:bananai123e3:car3:rede".to_vec();
 
     let parsed: Value = bde::from_bytes(&bytes)?;
