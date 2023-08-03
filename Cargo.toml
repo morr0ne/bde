@@ -11,11 +11,11 @@ repository = "https://github.com/morr0ne/bde"
 include = ["src/**/*.rs", "README.md", "LICENSE-APACHE", "LICENSE-MIT", "LICENSE-ZLIB"]
 
 [dependencies]
-itoa = "1.0.6"
-num-traits = "0.2.15"
-paste = "1.0.12"
-serde = { version = "1.0.160", default-features = false }
-thiserror = "1.0.40"
+itoa = "1.0.9"
+num-traits = "0.2.16"
+paste = "1.0.14"
+serde = { version = "1.0.180", default-features = false }
+thiserror = "1.0.44"
 
 [dev-dependencies]
 color-eyre = "0.6.2"
