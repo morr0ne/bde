@@ -12,6 +12,9 @@
 ### Removed
 - Removed undocumented methods on ByteString
 
+### Internal Changes
+- Removed `paste` macro in favor of a manual implementation to improve compile times
+
 # 0.2.2 (February 6, 2023)
 
 ### Added
