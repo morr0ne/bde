@@ -2,13 +2,13 @@
 name = "bde"
 version = "0.2.2"
 edition = "2021"
-license = "MIT OR Apache-2.0 OR Zlib"
+license = "MIT OR Apache-2.0"
 authors = ["Federico Maria Morrone <contact@morrone.dev>"]
 description = "B-Decoder/Encoder"
 readme = "README.md"
 documentation = "https://docs.rs/bde"
 repository = "https://github.com/morr0ne/bde"
-include = ["src/**/*.rs", "README.md", "LICENSE-APACHE", "LICENSE-MIT", "LICENSE-ZLIB"]
+include = ["src/**/*.rs", "README.md", "LICENSE-APACHE", "LICENSE-MIT"]
 
 [dependencies]
 itoa = "1.0.9"
