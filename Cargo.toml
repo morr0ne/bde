@@ -12,9 +12,9 @@ include = ["src/**/*.rs", "README.md", "LICENSE-APACHE", "LICENSE-MIT"]
 
 [dependencies]
 itoa = "1.0.9"
-num-traits = "0.2.16"
-serde = { version = "1.0.180", default-features = false }
-thiserror = "1.0.44"
+num-traits = "0.2.17"
+serde = { version = "1.0.192", default-features = false }
+thiserror = "1.0.50"
 
 [dev-dependencies]
 anyhow = "1.0.72"
